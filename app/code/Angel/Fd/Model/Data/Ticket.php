@@ -1,0 +1,277 @@
+<?php
+
+
+namespace Angel\Fd\Model\Data;
+
+use Angel\Fd\Api\Data\TicketInterface;
+
+class Ticket extends \Magento\Framework\Api\AbstractExtensibleObject implements TicketInterface
+{
+
+    /**
+     * Get ticket_id
+     * @return string|null
+     */
+    public function getTicketId()
+    {
+        return $this->_get(self::TICKET_ID);
+    }
+
+    /**
+     * Set ticket_id
+     * @param string $ticketId
+     * @return \Angel\Fd\Api\Data\TicketInterface
+     */
+    public function setTicketId($ticketId)
+    {
+        return $this->setData(self::TICKET_ID, $ticketId);
+    }
+
+    /**
+     * Get product_id
+     * @return string|null
+     */
+    public function getProductId()
+    {
+        return $this->_get(self::PRODUCT_ID);
+    }
+
+    /**
+     * Set product_id
+     * @param string $productId
+     * @return \Angel\Fd\Api\Data\TicketInterface
+     */
+    public function setProductId($productId)
+    {
+        return $this->setData(self::PRODUCT_ID, $productId);
+    }
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     * @return \Angel\Fd\Api\Data\TicketExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * Set an extension attributes object.
+     * @param \Angel\Fd\Api\Data\TicketExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Angel\Fd\Api\Data\TicketExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Get customer_id
+     * @return string|null
+     */
+    public function getCustomerId()
+    {
+        return $this->_get(self::CUSTOMER_ID);
+    }
+
+    /**
+     * Set customer_id
+     * @param string $customerId
+     * @return \Angel\Fd\Api\Data\TicketInterface
+     */
+    public function setCustomerId($customerId)
+    {
+        return $this->setData(self::CUSTOMER_ID, $customerId);
+    }
+
+    /**
+     * Get start
+     * @return string|null
+     */
+    public function getStart()
+    {
+        return $this->_get(self::START);
+    }
+
+    /**
+     * Set start
+     * @param string $start
+     * @return \Angel\Fd\Api\Data\TicketInterface
+     */
+    public function setStart($start)
+    {
+        return $this->setData(self::START, $start);
+    }
+
+    /**
+     * Get end
+     * @return string|null
+     */
+    public function getEnd()
+    {
+        return $this->_get(self::END);
+    }
+
+    /**
+     * Set end
+     * @param string $end
+     * @return \Angel\Fd\Api\Data\TicketInterface
+     */
+    public function setEnd($end)
+    {
+        return $this->setData(self::END, $end);
+    }
+
+    /**
+     * Get price
+     * @return string|null
+     */
+    public function getPrice()
+    {
+        return $this->_get(self::PRICE);
+    }
+
+    /**
+     * Set price
+     * @param string $price
+     * @return \Angel\Fd\Api\Data\TicketInterface
+     */
+    public function setPrice($price)
+    {
+        return $this->setData(self::PRICE, $price);
+    }
+
+    /**
+     * Get created_at
+     * @return string|null
+     */
+    public function getCreatedAt()
+    {
+        return $this->_get(self::CREATED_AT);
+    }
+
+    /**
+     * Set created_at
+     * @param string $createdAt
+     * @return \Angel\Fd\Api\Data\TicketInterface
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(self::CREATED_AT, $createdAt);
+    }
+
+    /**
+     * Get credit_transaction_id
+     * @return string|null
+     */
+    public function getCreditTransactionId()
+    {
+        return $this->_get(self::CREDIT_TRANSACTION_ID);
+    }
+
+    /**
+     * Set credit_transaction_id
+     * @param string $creditTransactionId
+     * @return \Angel\Fd\Api\Data\TicketInterface
+     */
+    public function setCreditTransactionId($creditTransactionId)
+    {
+        return $this->setData(self::CREDIT_TRANSACTION_ID, $creditTransactionId);
+    }
+
+    /**
+     * Get status
+     * @return string|null
+     */
+    public function getStatus()
+    {
+        return $this->_get(self::STATUS);
+    }
+
+    /**
+     * Set status
+     * @param string $status
+     * @return \Angel\Fd\Api\Data\TicketInterface
+     */
+    public function setStatus($status)
+    {
+        return $this->setData(self::STATUS, $status);
+    }
+
+    /**
+     * Get serial
+     * @return string|null
+     */
+    public function getSerial()
+    {
+        return $this->_get(self::SERIAL);
+    }
+
+    /**
+     * Set serial
+     * @param string $serial
+     * @return \Angel\Fd\Api\Data\TicketInterface
+     */
+    public function setSerial($serial)
+    {
+        return $this->setData(self::SERIAL, $serial);
+    }
+
+    /**
+     * Get updated_at
+     * @return string|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->_get(self::UPDATED_AT);
+    }
+
+    /**
+     * Set updated_at
+     * @param string $updatedAt
+     * @return \Angel\Fd\Api\Data\TicketInterface
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        return $this->setData(self::UPDATED_AT, $updatedAt);
+    }
+
+    /**
+     * Get invoice_item_id
+     * @return string|null
+     */
+    public function getInvoiceItemId()
+    {
+        return $this->_get(self::INVOICE_ITEM_ID);
+    }
+
+    /**
+     * Set invoice_item_id
+     * @param string $invoiceItemId
+     * @return \Angel\Fd\Api\Data\TicketInterface
+     */
+    public function setInvoiceItemId($invoiceItemId)
+    {
+        return $this->setData(self::INVOICE_ITEM_ID, $invoiceItemId);
+    }
+
+    /**
+     * Get admin_id
+     * @return string|null
+     */
+    public function getAdminId()
+    {
+        return $this->_get(self::ADMIN_ID);
+    }
+
+    /**
+     * Set admin_id
+     * @param string $adminId
+     * @return \Angel\Fd\Api\Data\TicketInterface
+     */
+    public function setAdminId($adminId)
+    {
+        return $this->setData(self::ADMIN_ID, $adminId);
+    }
+}

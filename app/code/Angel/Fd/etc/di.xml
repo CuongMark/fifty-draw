@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="Angel\Fd\Api\PurchaseManagementInterface" type="Angel\Fd\Model\PurchaseManagement"/>
+	<preference for="Angel\Fd\Api\GetTicketManagementInterface" type="Angel\Fd\Model\GetTicketManagement"/>
+	<preference for="Angel\Fd\Api\TicketRepositoryInterface" type="Angel\Fd\Model\TicketRepository"/>
+	<preference for="Angel\Fd\Api\Data\TicketInterface" type="Angel\Fd\Model\Data\Ticket"/>
+	<preference for="Angel\Fd\Api\Data\ReceiptInterface" type="Angel\Fd\Model\Data\Receipt"/>
+	<preference for="Angel\Fd\Api\Data\TicketSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+	<!--<virtualType name="Angel\Fd\Model\ResourceModel\Ticket\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">-->
+		<!--<arguments>-->
+			<!--<argument name="mainTable" xsi:type="string">angel_fd_ticket</argument>-->
+			<!--<argument name="resourceModel" xsi:type="string">Angel\Fd\Model\ResourceModel\Ticket\Collection</argument>-->
+		<!--</arguments>-->
+	<!--</virtualType>-->
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+		<arguments>
+			<argument name="collections" xsi:type="array">
+				<item name="angel_fd_ticket_listing_data_source" xsi:type="string">Angel\Fd\Model\ResourceModel\Ticket\Grid\Collection</item>
+			</argument>
+		</arguments>
+	</type>
+</config>

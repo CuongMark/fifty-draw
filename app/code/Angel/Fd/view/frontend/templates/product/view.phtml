@@ -1,0 +1,24 @@
+<?php
+/**
+ * @var $block \Angel\Fd\Block\Product\View
+ */
+?>
+<?php if ($block->getProduct()->getFdStatus() == \Angel\Fd\Model\Product\Attribute\Source\Status::FINISHED): ?>
+    <h2><?= __('50/50 Raffle was finished') ?></h2>
+<?php elseif ($block->getProduct()->getFdStatus() == \Angel\Fd\Model\Product\Attribute\Source\Status::CANCELED): ?>
+    <h2><?= __('50/50 Raffle was canceled') ?></h2>
+<?php else: ?>
+    <?php $date = new \DateTime(); ?>
+    <?php $finish_at = new \DateTime($block->getProduct()->getFdFinishAt()); ?>
+    <div data-mage-init='{"fdCountdown": {"time_left":<?= $finish_at->getTimestamp() - $date->getTimestamp() ?>}}'></div>
+<?php endif; ?>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "Angel_Fd/js/validate": {
+                "loginUrl" : "<?= $block->getUrl('customer/account/login') ?>",
+                "jackPot" : "<?= $block->getJackPot() ?>"
+            }
+        }
+    }
+</script>

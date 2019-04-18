@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<update handle="styles"/>
+	<body>
+		<referenceContainer name="content">
+			<uiComponent name="angel_fd_ticket_form_edit"/>
+			<block class="Angel\Fd\Block\Adminhtml\Ticket\PrintBlock" name="ticket.print" template="Angel_Fd::ticket/print.phtml" before="-"/>
+		</referenceContainer>
+	</body>
+</page>

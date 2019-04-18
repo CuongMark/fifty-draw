@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+	<event name="sales_invoice_item_save_after">
+		<observer instance="Angel\Fd\Observer\Sales\InvoiceItemSaveAfter" name="angel_fd_observer_sales_invoiceitemsaveafter_sales_invoice_item_save_after"/>
+	</event>
+</config>

@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+	<event name="catalog_controller_product_init_after">
+		<observer instance="Angel\Fd\Observer\Frontend\Catalog\ControllerProductInitAfter" name="angel_fd_observer_frontend_catalog_controllerproductinitafter_catalog_controller_product_init_after"/>
+	</event>
+	<event name="page_block_html_topmenu_gethtml_before">
+		<observer instance="Angel\Fd\Observer\Frontend\Page\BlockHtmlTopmenuGethtmlBefore" name="angel_fd_observer_frontend_page_blockhtmltopmenugethtmlbefore_page_block_html_topmenu_gethtml_before"/>
+	</event>
+</config>
