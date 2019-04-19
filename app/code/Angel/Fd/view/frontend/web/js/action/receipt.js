@@ -22,7 +22,7 @@ define([
         action = function ( purchaseData, redirectUrl, isGlobal, messageContainer) {
             messageContainer = messageContainer || globalMessageList;
 
-            return storage.get(
+            return storage.post(
                 'rest/V1/angel-fd/getticket',
                 JSON.stringify(purchaseData),
                 isGlobal

@@ -7,9 +7,9 @@ interface GetTicketManagementInterface
 {
 
     /**
-     * @param int $ticketId
+     * @param int $ticket_id
      * @param int $customerId
      * @return \Angel\Fd\Api\Data\ReceiptInterface
      */
-    public function getGetTicket($ticketId, $customerId);
+    public function getGetTicket($ticket_id, $customerId);
 }

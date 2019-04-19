@@ -13,7 +13,7 @@
 $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 $customerSession = $objectManager->get('Magento\Customer\Model\Session');
 if($customerSession->isLoggedIn()) {
-    $buttonTitle = __('Purchase Tickets');
+    $buttonTitle = __('Purchase by Credit');
 } else {
     $buttonTitle = __('Login To Purchase');
 }

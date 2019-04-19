@@ -199,7 +199,8 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
                 ->setCustomerId($customerId)
                 ->setProductId($invoiceItem->getProductId())
                 ->setStatus(Status::STATUS_PAID)
-                ->setSerial($this->generateSerial());
+                ->setSerial($this->generateSerial())
+                ->setInvoiceItemId($invoiceItem->getId());
 
             $ticketData = $this->ticketRepository->save($this->ticketDataModel);
 

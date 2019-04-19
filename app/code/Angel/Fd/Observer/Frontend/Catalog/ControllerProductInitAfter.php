@@ -3,8 +3,18 @@
 
 namespace Angel\Fd\Observer\Frontend\Catalog;
 
+use Angel\Fd\Model\FdManagement;
+
 class ControllerProductInitAfter implements \Magento\Framework\Event\ObserverInterface
 {
+
+    private $fdManagement;
+
+    public function __construct(
+        FdManagement $fdManagement
+    ){
+        $this->fdManagement = $fdManagement;
+    }
 
     /**
      * Execute observer
@@ -15,6 +25,8 @@ class ControllerProductInitAfter implements \Magento\Framework\Event\ObserverInt
     public function execute(
         \Magento\Framework\Event\Observer $observer
     ) {
-        //Your observer code
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $observer->getEvent()->getProduct();
+        $this->fdManagement->updateStatus($product);
     }
 }

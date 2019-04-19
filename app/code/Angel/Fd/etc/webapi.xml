@@ -9,7 +9,7 @@
 			<parameter name="customerId" force="true">%customer_id%</parameter>
 		</data>
 	</route>
-	<route method="GET" url="/V1/angel-fd/getticket">
+	<route method="POST" url="/V1/angel-fd/getticket">
 		<service class="Angel\Fd\Api\GetTicketManagementInterface" method="getGetTicket"/>
 		<resources>
 			<resource ref="self"/>
