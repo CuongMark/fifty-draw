@@ -43,7 +43,7 @@ class TicketManagement
      */
     public function getProcessingTicket($productId){
         return $this->getCollection($productId)
-//            ->addFieldToFilter('status', ['in' => [Status::STATUS_PAID, Status::STATUS_WAITING, Status::STATUS_PRINTED]])
+            ->addFieldToFilter('status', ['in' => [Status::STATUS_PAID, Status::STATUS_WAITING, Status::STATUS_PRINTED]])
             ->setOrder('ticket_id', 'ASC');
     }
 
