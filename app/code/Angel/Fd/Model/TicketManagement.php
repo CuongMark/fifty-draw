@@ -43,7 +43,7 @@ class TicketManagement
      */
     public function getProcessingTicket($productId){
         return $this->getCollection($productId)
-            ->addFieldToFilter('status', ['in' => [Status::STATUS_PAID, Status::STATUS_WAITING, Status::STATUS_PRINTED]])
+//            ->addFieldToFilter('status', ['in' => [Status::STATUS_PAID, Status::STATUS_WAITING, Status::STATUS_PRINTED]])
             ->setOrder('ticket_id', 'ASC');
     }
 
@@ -124,21 +124,30 @@ class TicketManagement
     }
 
     /**
-     * @param $product
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param Product $product
+     * @return boolean
      */
     public function winningTickets($product){
-        $processingTicket = $this->getProcessingTicket($product->getId());
-        /** @var \Angel\Fd\Model\Ticket $ticket */
-        foreach ($processingTicket as $ticket){
-            if ($ticket->getStart() <= $product->getFdWinningNumber() && $product->getFdWinningNumber() <= $ticket->getEnd()){
-                $ticket->setStatus(Status::STATUS_WINNING);
-                $this->ticketRepository->save($ticket->getDataModel());
-            } else {
-                $ticket->setStatus(Status::STATUS_LOSE);
-                $this->ticketRepository->save($ticket->getDataModel());
+        $hasWiningTicket = false;
+        try {
+            $product->getResource()->beginTransaction();
+            $processingTicket = $this->getProcessingTicket($product->getId());
+            /** @var \Angel\Fd\Model\Ticket $ticket */
+            foreach ($processingTicket as $ticket) {
+                if ($ticket->getStart() <= $product->getFdWinningNumber() && $product->getFdWinningNumber() <= $ticket->getEnd()) {
+                    $ticket->setStatus(Status::STATUS_WINNING);
+                    $this->ticketRepository->save($ticket->getDataModel());
+                    $hasWiningTicket = true;
+                } else {
+                    $ticket->setStatus(Status::STATUS_LOSE);
+                    $this->ticketRepository->save($ticket->getDataModel());
+                }
             }
+            $product->getResource()->commit();
+        } catch (\Exception $e){
+            $product->getResource()->rollBack();
         }
+        return $hasWiningTicket;
     }
 
     /**

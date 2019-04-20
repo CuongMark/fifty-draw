@@ -203,9 +203,9 @@ class InstallData implements InstallDataInterface
                 'visible_on_front' => false,
                 'used_in_product_listing' => false,
                 'unique' => false,
-                'apply_to' => 'virtual',
+                'apply_to' => 'fd',
                 'system' => 1,
-                'group' => 'fd',
+                'group' => 'General',
                 'option' => ['values' => [""]]
             ]
         );

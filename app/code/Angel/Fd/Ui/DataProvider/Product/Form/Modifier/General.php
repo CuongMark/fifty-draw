@@ -7,6 +7,7 @@
 
 namespace Angel\Fd\Ui\DataProvider\Product\Form\Modifier;
 
+use Angel\Fd\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
@@ -57,6 +58,21 @@ class General extends AbstractModifier
             return $meta;
         }
         $meta = $this->enableTime($meta);
+
+        if ($product->getFdStatus() == Status::FINISHED){
+            $meta = $this->disableStartPotField($meta);
+            $meta = $this->disableStatusField($meta);
+        }
+
+        if ($product->getFdStatus() != Status::WAITING){
+            $meta = $this->disableWinningNumberField($meta);
+        }
+        if ($product->getFdStatus() != Status::NOT_START){
+            $meta = $this->disableStartAtField($meta);
+        }
+        if ($product->getFdStatus() != Status::PROCESSING){
+            $meta = $this->disableFinishAtField($meta);
+        }
         return $meta;
     }
 
@@ -66,9 +82,35 @@ class General extends AbstractModifier
             [
                 'product-details' => [
                     'children' => [
-                        'container_fifty_status' => [
+                        'container_fd_status' => [
                             'children' => [
-                                'fifty_status' =>[
+                                'fd_status' =>[
+                                    'arguments' => [
+                                        'data' => [
+                                            'config' => [
+                                                'disabled' => true,
+                                            ],
+                                        ],
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        );
+        return $meta;
+    }
+
+    protected function disableWinningNumberField(array $meta){
+        $meta = array_replace_recursive(
+            $meta,
+            [
+                'product-details' => [
+                    'children' => [
+                        'container_fd_winning_number' => [
+                            'children' => [
+                                'fd_winning_number' =>[
                                     'arguments' => [
                                         'data' => [
                                             'config' => [
@@ -122,6 +164,33 @@ class General extends AbstractModifier
                         'container_fd_finish_at' => [
                             'children' => [
                                 'fd_finish_at' =>[
+                                    'arguments' => [
+                                        'data' => [
+                                            'config' => [
+                                                'disabled' => true,
+                                                'notice' => ''
+                                            ],
+                                        ],
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        );
+        return $meta;
+    }
+
+    protected function disableStartAtField(array $meta){
+        $meta = array_replace_recursive(
+            $meta,
+            [
+                'product-details' => [
+                    'children' => [
+                        'container_fd_start_at' => [
+                            'children' => [
+                                'fd_start_at' =>[
                                     'arguments' => [
                                         'data' => [
                                             'config' => [

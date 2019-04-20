@@ -75,6 +75,29 @@ class FdManagement
         }
     }
 
+    /**
+     * @param $product
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    public function checkFinished($product){
+        if ($product->getFdWinningNumber()){
+            if ($product->getFdStatus() != Status::FINISHED){
+                $this->productRepository->save($product->setFdWinningNumber(null));
+                throw new \Exception(__('You can not set Winning Number before set the raffle is finished'));
+            } else {
+                $isWinning = $this->ticketManagement->winningTickets($product);
+                if (!$isWinning) {
+                    $product->setFdWinningNumber(null);
+                    $this->setCorrectStatus($product);
+                }
+            }
+        } elseif (!$product->getFdWinningNumber() && $product->getFdStatus() == Status::FINISHED){
+            $this->setCorrectStatus($product);
+        }
+    }
+
     public function massUpdateStatus(){
         $productCollection = $this->productCollectionFactory->create();
         $productCollection->addAttributeToFilter('type_id', Fd::TYPE_ID)
@@ -111,6 +134,26 @@ class FdManagement
             ['customer_email' => 'customer.email']
         );
         return $collection;
+    }
+
+    /**
+     * @param $product
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    protected function setCorrectStatus($product)
+    {
+        $now = new \DateTime();
+        $start_at = new \DateTime($product->getFdStartAt());
+        $finish_at = new \DateTime($product->getFdFinishAt());
+        if ($now < $start_at) {
+            $this->productRepository->save($product->setFdStatus(Status::NOT_START));
+        } elseif ($now >= $start_at && $now < $finish_at) {
+            $this->productRepository->save($product->setFdStatus(Status::PROCESSING));
+        } elseif ($now >= $finish_at) {
+            $this->productRepository->save($product->setFdStatus(Status::WAITING));
+        }
     }
 
 }
