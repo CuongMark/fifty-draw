@@ -8,6 +8,7 @@
 namespace Angel\Fd\Ui\DataProvider\Product\Form\Modifier;
 
 use Angel\Fd\Model\Product\Attribute\Source\Status;
+use Angel\Fd\Model\TicketManagement;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
@@ -26,15 +27,18 @@ class General extends AbstractModifier
      */
     protected $arrayManager;
     private $priceCurrency;
+    private $ticketManagement;
 
     public function __construct(
         LocatorInterface $locator,
         ArrayManager $arrayManager,
-        PriceCurrencyInterface $priceCurrency
+        PriceCurrencyInterface $priceCurrency,
+        TicketManagement $ticketManagement
     ){
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;
         $this->priceCurrency = $priceCurrency;
+        $this->ticketManagement = $ticketManagement;
     }
 
     /**
@@ -58,9 +62,9 @@ class General extends AbstractModifier
             return $meta;
         }
         $meta = $this->enableTime($meta);
+        $meta = $this->setWinningNumberFieldNotice($meta);
 
         if ($product->getFdStatus() == Status::FINISHED){
-            $meta = $this->disableStartPotField($meta);
             $meta = $this->disableStatusField($meta);
         }
 
@@ -69,8 +73,9 @@ class General extends AbstractModifier
         }
         if ($product->getFdStatus() != Status::NOT_START){
             $meta = $this->disableStartAtField($meta);
+            $meta = $this->disableStartPotField($meta);
         }
-        if ($product->getFdStatus() != Status::PROCESSING){
+        if (!in_array($product->getFdStatus(), [Status::NOT_START, Status::PROCESSING, Status::WAITING])){
             $meta = $this->disableFinishAtField($meta);
         }
         return $meta;
@@ -115,6 +120,34 @@ class General extends AbstractModifier
                                         'data' => [
                                             'config' => [
                                                 'disabled' => true,
+                                            ],
+                                        ],
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        );
+        return $meta;
+    }
+
+    protected function setWinningNumberFieldNotice(array $meta){
+        $lastTicket = $this->ticketManagement->getLastTicket($this->locator->getProduct()->getId());
+        $notice = $lastTicket->getEnd()?__('Last Ticket Number is %1', $lastTicket->getEnd()):__('No ticket was purchased');
+        $meta = array_replace_recursive(
+            $meta,
+            [
+                'product-details' => [
+                    'children' => [
+                        'container_fd_winning_number' => [
+                            'children' => [
+                                'fd_winning_number' =>[
+                                    'arguments' => [
+                                        'data' => [
+                                            'config' => [
+                                                'notice' => $notice,
                                             ],
                                         ],
                                     ]

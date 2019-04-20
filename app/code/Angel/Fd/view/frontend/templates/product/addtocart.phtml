@@ -13,7 +13,7 @@
 $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 $customerSession = $objectManager->get('Magento\Customer\Model\Session');
 if($customerSession->isLoggedIn()) {
-    $buttonTitle = __('Purchase by Credit');
+    $buttonTitle = __('Purchase with Store Credit');
 } else {
     $buttonTitle = __('Login To Purchase');
 }
@@ -21,6 +21,9 @@ if($customerSession->isLoggedIn()) {
 <?php if ($_product->isSaleable()): ?>
     <div class="box-tocart">
         <div class="fieldset">
+            <div id="jackPort" data-bind="scope:'jackPort'">
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            </div>
             <div id="customerCredit" data-bind="scope:'customerCredit'">
                 <!-- ko template: getTemplate() --><!-- /ko -->
             </div>
@@ -89,6 +92,15 @@ if($customerSession->isLoggedIn()) {
                 "components" : {
                     "customerCredit" : {
                         "component": "Magestore_Customercredit/js/view/current-credit-balance"
+                    }
+                }
+            }
+        },
+        "#jackPort": {
+            "Magento_Ui/js/core/app": {
+                "components" : {
+                    "jackPort" : {
+                        "component": "Angel_Fd/js/view/jackPort"
                     }
                 }
             }

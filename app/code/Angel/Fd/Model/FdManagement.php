@@ -89,6 +89,7 @@ class FdManagement
             } else {
                 $isWinning = $this->ticketManagement->winningTickets($product);
                 if (!$isWinning) {
+                    throw new \Exception(__('There are not winning ticket.'));
                     $product->setFdWinningNumber(null);
                     $this->setCorrectStatus($product);
                 }

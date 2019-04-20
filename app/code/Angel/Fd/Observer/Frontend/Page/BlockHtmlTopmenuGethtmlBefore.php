@@ -39,11 +39,20 @@ class BlockHtmlTopmenuGethtmlBefore implements \Magento\Framework\Event\Observer
         $menu->addChild($node);
 
         $data = [
-            'name'      => __('Finished'),
-            'url'       => $this->urlBuilder->getUrl('fifty_percent/finished'),
+            'name'      => __('Current Raffle'),
+            'id'        => 'fd_current_item',
+            'url'       => $this->urlBuilder->getUrl('fifty_percent'),
             'is_active' => false
         ];
         $processing = new Node($data, 'id', $tree, $node);
         $node->addChild($processing);
+
+        $data = [
+            'name'      => __('Finished'),
+            'url'       => $this->urlBuilder->getUrl('fifty_percent/finished'),
+            'is_active' => false
+        ];
+        $finished = new Node($data, 'id', $tree, $node);
+        $node->addChild($finished);
     }
 }
