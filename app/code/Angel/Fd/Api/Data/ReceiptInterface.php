@@ -112,14 +112,6 @@ interface ReceiptInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
 
 
     /**
-     * Set card_number
-     * @param string $cardNumber
-     * @return \Angel\Fd\Api\Data\ReceiptInterface
-     */
-    public function setCardNumber($cardNumber);
-
-
-    /**
      * Get serial
      * @return string|null
      */

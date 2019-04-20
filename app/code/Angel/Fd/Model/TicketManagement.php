@@ -53,7 +53,7 @@ class TicketManagement
      */
     public function getLastTicket($productId){
         return $this->getCollection($productId)
-            ->setOrder('ticket_id')
+            ->setOrder('end')
             ->setPageSize(1)
             ->setCurPage(1)
             ->getFirstItem();

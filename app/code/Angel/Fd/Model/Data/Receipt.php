@@ -141,17 +141,6 @@ class Receipt extends \Magento\Framework\Api\AbstractExtensibleObject implements
         return $this->setData(self::CREATED_AT, $createdAt);
     }
 
-
-    /**
-     * Set card_number
-     * @param string $cardNumber
-     * @return \Angel\Fd\Api\Data\ReceiptInterface
-     */
-    public function setCardNumber($cardNumber)
-    {
-        return $this->setData(self::CARD_NUMBER, $cardNumber);
-    }
-
     /**
      * Get status
      * @return string|null

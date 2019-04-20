@@ -70,8 +70,8 @@ class InstallSchema implements InstallSchemaInterface
 
         $table_angel_fd_ticket->addColumn(
             'created_at',
-            Table::TYPE_TIMESTAMP,
-            ['default' => Table::TIMESTAMP_INIT, 'nullable' => false],
+            Table::TYPE_DATETIME,
+            ['default' => new \Zend_Db_Expr('CURRENT_TIMESTAMP'), 'nullable' => false],
             [],
             'Created At'
         );

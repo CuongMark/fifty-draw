@@ -20,7 +20,6 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
     private $ticketRepository;
     private $ticketManagement;
     private $eventManager;
-    private $prizeManagement;
     private $ticket;
     private $customerManagement;
 
@@ -32,7 +31,8 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
         TicketRepository $ticketRepository,
         TicketManagement $ticketManagement,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        Ticket $ticket
+        Ticket $ticket,
+        CustomerManagement $customerManagement
     ){
         $this->messageManager = $message;
         $this->customerSession = $customerSession;
@@ -42,6 +42,7 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
         $this->ticketManagement = $ticketManagement;
         $this->eventManager = $eventManager;
         $this->ticket = $ticket;
+        $this->customerManagement = $customerManagement;
     }
 
     /**
@@ -91,7 +92,7 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
      * @param $customerId
      * @param $status
      * @param null $customPrice
-     * @return \Angel\Fd\Api\Data\TicketInterface|Data\Ticket
+     * @return \Angel\Fd\Api\Data\TicketInterface|Data\Ticket|boolean
      */
     public function postPurchaseAdmin($product_id, $qty, $customerId, $status, $customPrice = null)
     {
@@ -126,7 +127,7 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
             $this->messageManager->addErrorMessage($e->getMessage());
             $this->ticket->getResource()->rollBack();
         }
-        return $this->ticketDataModel;
+        return false;
     }
 
     /**
@@ -142,7 +143,6 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
         /** @var Ticket $lastTicket */
         $lastTicket = $this->ticketManagement->getLastTicket($product->getId());
         $lastTicketNumber = $lastTicket->getEnd();
-        $drawnCard = $this->prizeManagement->getDrawnCards($product->getId());
 
         /**
          * 0 - customer_emai
@@ -152,7 +152,7 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
          */
         foreach ($data as $ticket){
             if ($ticket[1] <= 0){
-                throw new \Exception(__('The Qty "%1" is not available'), $ticket[1]);
+                throw new \Exception(__('The Qty "%1" is not available', $ticket[1]));
             }
 
             if (!in_array($ticket[3],[Status::STATUS_PENDING, Status::STATUS_PAID, Status::STATUS_CANCELED, Status::STATUS_WAITING])){
@@ -166,7 +166,6 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
                 ->setPrice($price)
                 ->setCustomerId($customer->getId())
                 ->setProductId($product->getId())
-                ->setCardNumber($ticket[2])
                 ->setStatus($ticket[3])
                 ->setSerial($this->generateSerial());
             $this->ticketRepository->save($this->ticketDataModel);

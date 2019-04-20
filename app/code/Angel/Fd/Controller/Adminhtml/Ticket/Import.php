@@ -3,7 +3,7 @@
 
 namespace Angel\Fd\Controller\Adminhtml\Ticket;
 
-class NewAction extends \Angel\Fd\Controller\Adminhtml\Ticket
+class Import extends \Angel\Fd\Controller\Adminhtml\Ticket
 {
 
     protected $resultPageFactory;
@@ -29,11 +29,11 @@ class NewAction extends \Angel\Fd\Controller\Adminhtml\Ticket
      */
     public function execute()
     {
-
+        // 3. Build edit form
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $this->initPage($resultPage)->addBreadcrumb(__('New Ticket'), __('New Ticket'));
-        $resultPage->getConfig()->getTitle()->prepend(__('New Ticket'));
+        $this->initPage($resultPage)->addBreadcrumb(__('Import Tickets'), __('Import Tickets'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Import Tickets'));
         return $resultPage;
     }
 }

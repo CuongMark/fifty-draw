@@ -16,6 +16,7 @@
 		<arguments>
 			<argument name="collections" xsi:type="array">
 				<item name="angel_fd_ticket_listing_data_source" xsi:type="string">Angel\Fd\Model\ResourceModel\Ticket\Grid\Collection</item>
+				<item name="angel_fd_ticket_print_listing_data_source" xsi:type="string">Angel\Fd\Model\ResourceModel\Ticket\Grid\Collection</item>
 			</argument>
 		</arguments>
 	</type>

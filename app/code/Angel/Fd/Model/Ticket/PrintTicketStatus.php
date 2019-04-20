@@ -3,7 +3,7 @@
  * Angel Queen of Hearts
  * Copyright (C) 2018 Mark Wolf
  *
- * This file included in Angel/Fd is licensed under OSL 3.0
+ * This file included in Angel/QoH is licensed under OSL 3.0
  *
  * http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  * Please see LICENSE.txt for the full text of the OSL 3.0 license
@@ -11,8 +11,9 @@
 
 namespace Angel\Fd\Model\Ticket;
 
-class EditTicketStatus extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+class PrintTicketStatus extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
+
     /**
      * getAllOptions
      *
@@ -21,11 +22,9 @@ class EditTicketStatus extends \Magento\Eav\Model\Entity\Attribute\Source\Abstra
     public function getAllOptions()
     {
         $this->_options = [
-            ['value' => Status::STATUS_PENDING, 'label' => __('Pending')],
-            ['value' => Status::STATUS_PAID, 'label' => __('Paid')],
+            ['value' => '', 'label' => __('Don\'t update')],
             ['value' => Status::STATUS_WAITING, 'label' => __('Waiting')],
             ['value' => Status::STATUS_PRINTED, 'label' => __('Printed')],
-            ['value' => Status::STATUS_CANCELED, 'label' => __('Canceled')],
         ];
         return $this->_options;
     }
@@ -38,11 +37,9 @@ class EditTicketStatus extends \Magento\Eav\Model\Entity\Attribute\Source\Abstra
     static public function getOptionArray()
     {
         return array(
-            Status::STATUS_PENDING => __('Pending'),
-            Status::STATUS_PAID => __('Paid'),
+            '' => __('Don\'t Update'),
             Status::STATUS_WAITING => __('Waiting'),
             Status::STATUS_PRINTED => __('Printed'),
-            Status::STATUS_CANCELED => __('Canceled'),
         );
     }
 
@@ -54,7 +51,7 @@ class EditTicketStatus extends \Magento\Eav\Model\Entity\Attribute\Source\Abstra
     static public function getOptions()
     {
         $options = array();
-        foreach (Status::getOptionArray() as $value => $label) {
+        foreach (self::getOptionArray() as $value => $label) {
             $options[] = array(
                 'value' => $value,
                 'label' => $label
@@ -65,6 +62,6 @@ class EditTicketStatus extends \Magento\Eav\Model\Entity\Attribute\Source\Abstra
 
     public function toOptionArray()
     {
-        return Status::getOptions();
+        return self::getOptions();
     }
 }

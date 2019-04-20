@@ -133,7 +133,7 @@
             </settings>
         </field>
 
-        <field formElement="select" name="status" sortOrder="90">
+        <field formElement="select" name="status" sortOrder="60">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">Ticket</item>

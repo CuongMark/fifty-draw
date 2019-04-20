@@ -21,7 +21,7 @@ class MassPrintButton extends GenericButton implements ButtonProviderInterface
                     'buttonAdapter' => [
                         'actions' => [
                             [
-                                'targetName' => 'angel_qoh_print_form.angel_qoh_print_form',
+                                'targetName' => 'angel_fd_print_form.angel_fd_print_form',
                                 'actionName' => 'save',
                                 'params' => [
                                     false

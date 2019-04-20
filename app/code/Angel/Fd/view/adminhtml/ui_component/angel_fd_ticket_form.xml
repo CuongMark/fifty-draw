@@ -93,22 +93,6 @@
 				</validation>
 			</settings>
 		</field>
-		
-		<field formElement="input" name="card_number" sortOrder="40">
-			<argument name="data" xsi:type="array">
-				<item name="config" xsi:type="array">
-					<item name="source" xsi:type="string">Ticket</item>
-				</item>
-			</argument>
-			<settings>
-				<dataType>text</dataType>
-				<label translate="true">Card Number</label>
-				<dataScope>card_number</dataScope>
-				<validation>
-					<rule name="required-entry" xsi:type="boolean">true</rule>
-				</validation>
-			</settings>
-		</field>
 
 		<field formElement="select" name="status" sortOrder="90">
 			<argument name="data" xsi:type="array">

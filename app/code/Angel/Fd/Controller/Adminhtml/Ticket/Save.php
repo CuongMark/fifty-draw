@@ -3,12 +3,18 @@
 
 namespace Angel\Fd\Controller\Adminhtml\Ticket;
 
+use Angel\Fd\Model\CustomerManagement;
+use Angel\Fd\Model\PurchaseManagement;
+use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Framework\Exception\LocalizedException;
 
 class Save extends \Magento\Backend\App\Action
 {
 
     protected $dataPersistor;
+    private $customerRepository;
+    private $purchaseManagement;
+    private $customerManagement;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
@@ -16,9 +22,15 @@ class Save extends \Magento\Backend\App\Action
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor
+        \Magento\Framework\App\Request\DataPersistorInterface $dataPersistor,
+        CustomerRepository $customerRepository,
+        PurchaseManagement $purchaseManagement,
+        CustomerManagement $customerManagement
     ) {
         $this->dataPersistor = $dataPersistor;
+        $this->customerRepository = $customerRepository;
+        $this->purchaseManagement = $purchaseManagement;
+        $this->customerManagement = $customerManagement;
         parent::__construct($context);
     }
 
@@ -34,31 +46,54 @@ class Save extends \Magento\Backend\App\Action
         $data = $this->getRequest()->getPostValue();
         if ($data) {
             $id = $this->getRequest()->getParam('ticket_id');
-        
+
             $model = $this->_objectManager->create(\Angel\Fd\Model\Ticket::class)->load($id);
             if (!$model->getId() && $id) {
                 $this->messageManager->addErrorMessage(__('This Ticket no longer exists.'));
                 return $resultRedirect->setPath('*/*/');
             }
-        
-            $model->setData($data);
-        
-            try {
-                $model->save();
-                $this->messageManager->addSuccessMessage(__('You saved the Ticket.'));
-                $this->dataPersistor->clear('angel_fd_ticket');
-        
-                if ($this->getRequest()->getParam('back')) {
-                    return $resultRedirect->setPath('*/*/edit', ['ticket_id' => $model->getId()]);
+
+            if (!$id){
+                $email = $this->getRequest()->getParam('customer_email');
+                $product_id = $this->getRequest()->getParam('product_id');
+                $qty = $this->getRequest()->getParam('qty');
+                $status = $this->getRequest()->getParam('status');
+
+                try {
+                    $customer = $this->customerManagement->getOrCreateCustomerByEmail($email);
+                    $ticket = $this->purchaseManagement->postPurchaseAdmin($product_id, $qty, $customer->getId(), $status);
+
+                    $this->dataPersistor->clear('angel_fd_ticket');
+                    if ($ticket && $this->getRequest()->getParam('back')) {
+                        return $resultRedirect->setPath('*/*/edit', ['ticket_id' => $ticket->getTicketId()]);
+                    }
+                    return $resultRedirect->setPath('*/*/');
+                } catch (\Exception $e){
+                    $this->messageManager->addErrorMessage($e->getMessage());
                 }
-                return $resultRedirect->setPath('*/*/');
-            } catch (LocalizedException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Ticket.'));
+
+            } else {
+//                $model->setData($data);
+                if (isset($data['status'])){
+                    $model->setStatus($data['status']);
+                }
+                try {
+                    $model->save();
+                    $this->messageManager->addSuccessMessage(__('You updated the Ticket.'));
+                    $this->dataPersistor->clear('angel_fd_ticket');
+
+                    if ($this->getRequest()->getParam('back')) {
+                        return $resultRedirect->setPath('*/*/edit', ['ticket_id' => $model->getId()]);
+                    }
+                    return $resultRedirect->setPath('*/*/');
+                } catch (LocalizedException $e) {
+                    $this->messageManager->addErrorMessage($e->getMessage());
+                } catch (\Exception $e) {
+                    $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Ticket.'));
+                }
+
+                $this->dataPersistor->set('angel_fd_ticket', $data);
             }
-        
-            $this->dataPersistor->set('angel_fd_ticket', $data);
             return $resultRedirect->setPath('*/*/edit', ['ticket_id' => $this->getRequest()->getParam('ticket_id')]);
         }
         return $resultRedirect->setPath('*/*/');

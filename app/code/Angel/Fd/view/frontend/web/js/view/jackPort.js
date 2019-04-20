@@ -15,7 +15,7 @@ define([
 
     return Component.extend({
         defaults: {
-            template: 'Angel_Df/jackPort'
+            template: 'Angel_Fd/jack-port'
         },
         priceFormat : window.checkoutConfig?window.checkoutConfig.priceFormat:{"pattern":"$%s","precision":2,"requiredPrecision":2,"decimalSymbol":".","groupSymbol":",","groupLength":3,"integerRequired":false},
         jackPot : fd.jackPot,
