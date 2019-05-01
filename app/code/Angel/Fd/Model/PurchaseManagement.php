@@ -9,6 +9,7 @@ use Magento\Catalog\Model\ProductRepository;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Message\ManagerInterface;
 use Angel\Fd\Model\Product\Attribute\Source\Status as FdStatus;
+use Magento\Framework\DataObject;
 
 class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
 {
@@ -65,8 +66,12 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
             $lastTicket = $this->ticketManagement->getLastTicket($product_id);
             $lastTicketNumber = $lastTicket->getEnd();
 
+            $freeTickets = new DataObject(['free_ticket' => 0]);
+            $this->eventManager->dispatch('angel_get_free_ticket', ['product' => $product, 'qty' => $qty, 'free' => $freeTickets]);
+            $freeTickets = $freeTickets->getData('free_ticket');
+
             $this->ticketDataModel->setStart($lastTicketNumber + 1)
-                ->setEnd($lastTicketNumber + $qty)
+                ->setEnd($lastTicketNumber + $qty + $freeTickets)
                 ->setPrice($product->getPrice() * $qty)
                 ->setCustomerId($customerId)
                 ->setProductId($product_id)
@@ -78,7 +83,11 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
             $ticketData = $this->ticketRepository->save($this->ticketDataModel);
 
             $this->ticket->getResource()->commit();
-            $this->messageManager->addSuccessMessage(__('You purchased successfully %1 tickets', $qty));
+            if (!$freeTickets){
+                $this->messageManager->addSuccessMessage(__('You purchased successfully %1 ticket(s)', $qty));
+            } else {
+                $this->messageManager->addSuccessMessage(__('You purchased successfully %1 tickets and get %2 free ticket(s)', $qty, $freeTickets));
+            }
             return $ticketData;
         } catch (\Exception $e){
             $this->messageManager->addErrorMessage($e->getMessage());
@@ -111,8 +120,12 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
 
             $price = $customPrice?$customPrice:$product->getPrice() * $qty;
 
+            $freeTickets = new DataObject(['free_ticket' => 0]);
+            $this->eventManager->dispatch('angel_get_free_ticket', ['product' => $product, 'qty' => $qty, 'free' => $freeTickets]);
+            $freeTickets = $freeTickets->getData('free_ticket');
+
             $this->ticketDataModel->setStart($lastTicketNumber + 1)
-                ->setEnd($lastTicketNumber + $qty)
+                ->setEnd($lastTicketNumber + $qty + $freeTickets)
                 ->setPrice($price)
                 ->setCustomerId($customerId)
                 ->setProductId($product_id)
@@ -121,7 +134,11 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
             $ticketData = $this->ticketRepository->save($this->ticketDataModel);
 
             $this->ticket->getResource()->commit();
-            $this->messageManager->addSuccessMessage(__('You purchased successfully %1 tickets', $qty));
+            if (!$freeTickets){
+                $this->messageManager->addSuccessMessage(__('You purchased successfully %1 ticket(s)', $qty));
+            } else {
+                $this->messageManager->addSuccessMessage(__('You purchased successfully %1 tickets and get %2 free ticket(s)', $qty, $freeTickets));
+            }
             return $ticketData;
         } catch (\Exception $e){
             $this->messageManager->addErrorMessage($e->getMessage());
@@ -192,8 +209,12 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
 
             $customerId = $invoiceItem->getOrderItem()->getOrder()->getCustomerId();
 
+            $freeTickets = new DataObject(['free_ticket' => 0]);
+            $this->eventManager->dispatch('angel_get_free_ticket', ['product' => $product, 'qty' => $qty, 'free' => $freeTickets]);
+            $freeTickets = $freeTickets->getData('free_ticket');
+
             $this->ticketDataModel->setStart($lastTicketNumber + 1)
-                ->setEnd($lastTicketNumber + $qty)
+                ->setEnd($lastTicketNumber + $qty + $freeTickets)
                 ->setPrice($product->getPrice() * $qty)
                 ->setCustomerId($customerId)
                 ->setProductId($invoiceItem->getProductId())
@@ -204,7 +225,11 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
             $ticketData = $this->ticketRepository->save($this->ticketDataModel);
 
             $this->ticket->getResource()->commit();
-            $this->messageManager->addSuccessMessage(__('You purchased successfully %1 tickets', $qty));
+            if (!$freeTickets){
+                $this->messageManager->addSuccessMessage(__('You purchased successfully %1 ticket(s)', $qty));
+            } else {
+                $this->messageManager->addSuccessMessage(__('You purchased successfully %1 tickets and get %2 free ticket(s)', $qty, $freeTickets));
+            }
             return $ticketData;
         } catch (\Exception $e){
             $this->messageManager->addErrorMessage($e->getMessage());

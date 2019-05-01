@@ -87,11 +87,13 @@ class FdManagement
                 $this->productRepository->save($product->setFdWinningNumber(null));
                 throw new \Exception(__('You can not set Winning Number before set the raffle is finished'));
             } else {
-                $isWinning = $this->ticketManagement->winningTickets($product);
-                if (!$isWinning) {
-                    throw new \Exception(__('There are not winning ticket.'));
-                    $product->setFdWinningNumber(null);
-                    $this->setCorrectStatus($product);
+                if (!$this->ticketManagement->hasWinningTicket($product->getId())) {
+                    $isWinning = $this->ticketManagement->winningTickets($product);
+                    if (!$isWinning) {
+                        throw new \Exception(__('There are not winning ticket.'));
+                        $product->setFdWinningNumber(null);
+                        $this->setCorrectStatus($product);
+                    }
                 }
             }
         } elseif (!$product->getFdWinningNumber() && $product->getFdStatus() == Status::FINISHED){

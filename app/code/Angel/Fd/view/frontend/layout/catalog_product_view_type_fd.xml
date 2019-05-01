@@ -6,7 +6,7 @@
     </head>
     <body>
         <referenceContainer name="product.info.main">
-            <block class="Angel\Fd\Block\Product\View" name="fd.block" as="fd.block" after="product.info.price" cacheable="false" template="Angel_Fd::product/view.phtml"/>
+            <block class="Angel\Fd\Block\Product\View" name="raffle.block" as="raffle.block" after="product.info.price" cacheable="false" template="Angel_Fd::product/view.phtml"/>
         </referenceContainer>
         <referenceBlock name="product.info.addtocart">
             <action method="setTemplate">

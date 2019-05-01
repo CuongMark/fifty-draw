@@ -49,6 +49,15 @@ class TicketManagement
 
     /**
      * @param int $productId
+     * @return bool
+     */
+    public function hasWinningTicket($productId){
+        return (boolean)$this->getCollection($productId)
+            ->addFieldToFilter('status', ['in' => [Status::STATUS_WINNING]])->getSize();
+    }
+
+    /**
+     * @param int $productId
      * @return \Magento\Framework\DataObject
      */
     public function getLastTicket($productId){
