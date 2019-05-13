@@ -3,6 +3,7 @@
 
 namespace Angel\Fd\Model;
 
+use Angel\Fd\Model\Product\Type\Fd;
 use Angel\Fd\Model\Ticket\Status;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRepository;
@@ -70,9 +71,13 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
             $this->eventManager->dispatch('angel_get_free_ticket', ['product' => $product, 'qty' => $qty, 'free' => $freeTickets]);
             $freeTickets = $freeTickets->getData('free_ticket');
 
+            $fee = new DataObject(['extra_fee' => 0]);
+            $this->eventManager->dispatch('angel_get_extra_fee', ['product' => $product, 'qty' => $qty, 'fee' => $fee]);
+            $fee = $fee->getData('extra_fee');
+
             $this->ticketDataModel->setStart($lastTicketNumber + 1)
                 ->setEnd($lastTicketNumber + $qty + $freeTickets)
-                ->setPrice($product->getPrice() * $qty)
+                ->setPrice($product->getPrice() * $qty + $fee)
                 ->setCustomerId($customerId)
                 ->setProductId($product_id)
                 ->setStatus(Status::STATUS_PENDING)
@@ -124,9 +129,13 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
             $this->eventManager->dispatch('angel_get_free_ticket', ['product' => $product, 'qty' => $qty, 'free' => $freeTickets]);
             $freeTickets = $freeTickets->getData('free_ticket');
 
+            $fee = new DataObject(['extra_fee' => 0]);
+            $this->eventManager->dispatch('angel_get_extra_fee', ['product' => $product, 'qty' => $qty, 'fee' => $fee]);
+            $fee = $fee->getData('extra_fee');
+
             $this->ticketDataModel->setStart($lastTicketNumber + 1)
                 ->setEnd($lastTicketNumber + $qty + $freeTickets)
-                ->setPrice($price)
+                ->setPrice($price + $fee)
                 ->setCustomerId($customerId)
                 ->setProductId($product_id)
                 ->setStatus($status)
@@ -191,15 +200,20 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
     }
 
     /**
-     * @param \Magento\Sales\Model\Order\Invoice\Item $invoiceItem
-     * @return \Angel\Fd\Api\Data\TicketInterface
+     * @param $invoiceItem
+     * @return \Angel\Fd\Api\Data\TicketInterface|bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function createTicketByInvoiceItem($invoiceItem){
+        $product = $this->productRepository->getById($invoiceItem->getProductId());
+        if ($product->getTypeId()!=Fd::TYPE_ID){
+            return true;
+        }
         try {
             $this->ticket->getResource()->beginTransaction();
             $qty = $invoiceItem->getQty();
 
-            $product = $this->productRepository->getById($invoiceItem->getProductId());
+//            $product = $this->productRepository->getById($invoiceItem->getProductId());
             if ($product->getFdStatus() != FdStatus::PROCESSING){
                 throw new \Exception('The Raffle is not processing');
             }
@@ -213,9 +227,13 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
             $this->eventManager->dispatch('angel_get_free_ticket', ['product' => $product, 'qty' => $qty, 'free' => $freeTickets]);
             $freeTickets = $freeTickets->getData('free_ticket');
 
+            $fee = new DataObject(['extra_fee' => 0]);
+            $this->eventManager->dispatch('angel_get_extra_fee', ['product' => $product, 'qty' => $qty, 'fee' => $fee]);
+            $fee = $fee->getData('extra_fee');
+
             $this->ticketDataModel->setStart($lastTicketNumber + 1)
                 ->setEnd($lastTicketNumber + $qty + $freeTickets)
-                ->setPrice($product->getPrice() * $qty)
+                ->setPrice($product->getPrice() * $qty + $fee)
                 ->setCustomerId($customerId)
                 ->setProductId($invoiceItem->getProductId())
                 ->setStatus(Status::STATUS_PAID)
