@@ -63,6 +63,10 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
             if ($product->getFdStatus() != FdStatus::PROCESSING){
                 throw new \Exception('The Raffle is not processing');
             }
+
+            if (!$this->customerManagement->isInPurchaseGroup($customerId)){
+                throw new \Exception('You are not a member');
+            }
             /** @var Ticket $lastTicket */
             $lastTicket = $this->ticketManagement->getLastTicket($product_id);
             $lastTicketNumber = $lastTicket->getEnd();
@@ -118,6 +122,9 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
             $product = $this->productRepository->getById($product_id);
             if (! in_array($product->getFdStatus(), [FdStatus::PROCESSING, FdStatus::WAITING])){
                 throw new \Exception('The Raffle is not saleable');
+            }
+            if (!$this->customerManagement->isInPurchaseGroup($customerId)){
+                throw new \Exception('You are not a member');
             }
             /** @var Ticket $lastTicket */
             $lastTicket = $this->ticketManagement->getLastTicket($product_id);
@@ -222,6 +229,9 @@ class PurchaseManagement implements \Angel\Fd\Api\PurchaseManagementInterface
             $lastTicketNumber = $lastTicket->getEnd();
 
             $customerId = $invoiceItem->getOrderItem()->getOrder()->getCustomerId();
+            if (!$this->customerManagement->isInPurchaseGroup($customerId)){
+                throw new \Exception('You are not a member');
+            }
 
             $freeTickets = new DataObject(['free_ticket' => 0]);
             $this->eventManager->dispatch('angel_get_free_ticket', ['product' => $product, 'qty' => $qty, 'free' => $freeTickets]);

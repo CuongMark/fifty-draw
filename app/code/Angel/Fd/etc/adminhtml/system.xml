@@ -10,14 +10,10 @@
 			<resource>Angel_Fd::config_angel_fd</resource>
 			<group id="general" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
 				<label>General</label>
-				<field id="enable" showInDefault="0" showInStore="0" showInWebsite="1" sortOrder="10" translate="label" type="select">
+				<field id="enable" showInDefault="1" showInStore="0" showInWebsite="1" sortOrder="10" translate="label" type="select">
 					<label>Enable</label>
 					<comment/>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-				</field>
-				<field id="customer_groups" showInDefault="0" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" type="text">
-					<label>Customer Groups</label>
-					<comment>The groups of customer are able to purchase tickets</comment>
 				</field>
 			</group>
 		</section>
