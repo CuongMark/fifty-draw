@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
 	<menu>
-		<add id="Angel::fifty_draw" module="Angel_Fd" parent="Angel::top_level" resource="Angel_Fd::fd" sortOrder="10" title="50/50 Raffle"/>
+		<add id="Angel::fifty_draw" module="Angel_Fd" parent="Angel::top_level" resource="Angel_Fd::fd" sortOrder="10" title="Auto Draw 50/50 Raffle"/>
 			<add action="angel_fd/product/index" id="Angel_Fd::product" module="Angel_Fd" parent="Angel::fifty_draw" resource="Angel_Fd::Product" sortOrder="10" title="50/50 Raffle Management"/>
 			<add action="angel_fd/ticket/index" id="Angel_Fd::ticket" module="Angel_Fd" parent="Angel::fifty_draw" resource="Angel_Fd::Ticket" sortOrder="10" title="Tickets Management"/>
 
