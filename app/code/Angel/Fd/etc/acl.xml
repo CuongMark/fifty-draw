@@ -6,13 +6,8 @@
 				<resource id="Angel_Core::angel">
 					<resource id="Angel_Core::fd" title="50/50 Raffle">
 						<resource id="Angel_Fd::Product" sortOrder="10" title="50/50 Product Management"/>
-						<resource id="Angel_Fd::Ticket" sortOrder="10" title="Ticket">
-							<resource id="Angel_Fd::Ticket_save" sortOrder="10" title="Save Ticket"/>
-							<resource id="Angel_Fd::Ticket_delete" sortOrder="20" title="Delete Ticket"/>
-							<resource id="Angel_Fd::Ticket_update" sortOrder="30" title="Update Ticket"/>
-							<resource id="Angel_Fd::Ticket_view" sortOrder="40" title="View Ticket"/>
-							<resource id="Angel_Fd::Ticket_print" sortOrder="40" title="Print Ticket"/>
-						</resource>
+						<resource id="Angel_Fd::Pr" sortOrder="20" title="Prize" />
+						<resource id="Angel_Fd::Ticket" sortOrder="30" title="Ticket" />
 					</resource>
 				</resource>
 
